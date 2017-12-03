@@ -16,7 +16,6 @@ namespace Yandex
         /// <summary>Yandex Maps API-key</summary>
         private readonly string Key;
         private const string Url = "https://geocode-maps.yandex.ru/1.x/";
-        public Lang lang = Lang.ru_RU;
 
         public GeoDecoder(string key = null) { Key = key; }
 
@@ -28,6 +27,7 @@ namespace Yandex
                 { "geocode", $"{latitude.ToString(CultureInfo.InvariantCulture)},{longitude.ToString(CultureInfo.InvariantCulture)}" },
                 { "results", "1" },
                 { "sco", CoordFormat.latlong.ToString() },
+                { "lang", lang.ToString() },
             };
             ApiResponse.ResponseData.YGeoObjectCollection.FeatureMember[] featureMembers = DoRequest(query);
             if (featureMembers == null || featureMembers.Length == 0 || featureMembers[0]?.GeoObject == null)
@@ -47,6 +47,7 @@ namespace Yandex
             {
                 { "geocode", address },
                 { "results", (qty == 0 ? 1 : (qty > 100 ? 100 : qty)).ToString() },
+                { "lang", lang.ToString() },
             };
             ApiResponse.ResponseData.YGeoObjectCollection.FeatureMember[] featureMembers = DoRequest(query);
             if (featureMembers == null || featureMembers.Length == 0)
@@ -69,10 +70,12 @@ namespace Yandex
             Address address = new Address();
             if (geoAddress != null)
             {
-                address.CountryCode = geoAddress.country_code;
-                address.PostalCode = geoAddress.postal_code;
+                address.Kind = geoObject.metaDataProperty?.GeocoderMetaData?.kind;
+                address.Text = geoObject.metaDataProperty?.GeocoderMetaData?.text;
                 address.Precision = geoObject.metaDataProperty?.GeocoderMetaData?.precision;
                 address.Formatted = geoAddress.formatted;
+                address.CountryCode = geoAddress.country_code;
+                address.PostalCode = geoAddress.postal_code;
                 if (geoAddress.Components != null)
                 {
                     foreach (var component in geoAddress.Components)
@@ -127,7 +130,6 @@ namespace Yandex
         {
             Uri cUri = new Uri(Url);
             query.Add("format", "json");
-            query.Add("lang", lang.ToString());
             if (!string.IsNullOrEmpty(Key))
                 query.Add("key", Key);
             string strQuery = string.Join("&", query.AllKeys.Select(key => key + "=" + HttpUtility.UrlEncode(query[key])));
@@ -264,8 +266,10 @@ namespace Yandex
             public string City = string.Empty;
             public string Street = string.Empty;
             public string House = string.Empty;
+            public string Kind = string.Empty;
             public string Precision = string.Empty;
             public string Formatted = string.Empty;
+            public string Text = string.Empty;
 
             public Envelope Envelope;
             public Point Point;
