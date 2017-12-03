@@ -16,6 +16,6 @@ Example
 using Yandex;
 
 GeoLocator.Position position = new GeoLocator(YandexKey).GetByIp(new GeoLocator.Ip { address_v4 = "77.88.55.55" });
-GeoDecoder.Address[] points = new GeoDecoder().GetPositionsByAddress("San-Francisco", 10);
+GeoDecoder.Address[] points = new GeoDecoder().GetPointsByAddress("San-Francisco", 10);
 ```
 
