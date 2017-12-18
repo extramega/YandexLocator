@@ -102,22 +102,24 @@ namespace Yandex
         {
             if (octets.Length != 4)
                 throw new ArgumentException("Octets array length must be 4");
+            //RFC3330
             switch (octets[0])
             {
-                case 0:
-                    if (octets[1] == 0 && octets[2] == 0 && octets[3] == 0)
-                        return true;//Ошибка
+                case 0://"this" network
+                case 10://private A
+                case 127://loopback
+                    return true;
+                case 169:
+                    if (octets[1] == 254)
+                        return true;//link local B
                     break;
-                case 10:
-                case 127:
-                    return true;//A
-                case 172:
-                    if (octets[1] >= 16 && octets[0] <= 31)
-                        return true;//B
+                case 172://private B
+                    if (octets[1] >= 16 && octets[1] <= 31)
+                        return true;//private B
                     break;
                 case 192:
                     if (octets[1] == 168)
-                        return true;//C
+                        return true;//private B
                     break;
                 case 255:
                     return true;//Broadcast
@@ -179,15 +181,15 @@ namespace Yandex
         public class Position
         {
             /// <summary>Широта в градусах. Имеет десятичное представление с точностью до семи знаков после запятой.</summary>
-            public double latitude;//55.743675,
+            public decimal latitude;//55.743675,
             /// <summary>Долгота в градусах. Имеет десятичное представление с точностью до семи знаков после запятой.</summary>
-            public double longitude;//37.5646301,
+            public decimal longitude;//37.5646301,
             /// <summary>Высота над поверхностью мирового океана.</summary>
-            public double altitude;//0.0, 
+            public decimal altitude;//0.0, 
             /// <summary>Максимальное расстояние от указанной точки, в пределах которого находится мобильное устройство.</summary>
-            public double precision;//701.71643,
+            public decimal precision;//701.71643,
             /// <summary>Максимальное отклонение от указанной высоты.</summary>
-            public double altitude_precision;//30.0, 
+            public decimal altitude_precision;//30.0, 
             /// <summary>Обозначение способа, которым определено местоположение: «gsm» — по сотам мобильных сетей, «wifi» — по точкам доступа Wi-Fi, «ip» — по IP-адресу.</summary>
             public string type;//"ip"
         }

@@ -50,7 +50,7 @@ namespace GeoLocation
             return res;
         }
 
-        protected string GetAddressByPosition(double latitude, double longitude)
+        protected string GetAddressByPosition(decimal latitude, decimal longitude)
         {
             string res = $"Position = { new JavaScriptSerializer().Serialize(new { latitude, longitude })}\n";
             GeoDecoder.Address address = new GeoDecoder(YandexKey).GetAddressByPoint(latitude, longitude);

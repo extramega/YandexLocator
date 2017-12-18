@@ -16,7 +16,7 @@
     <h3>GetPositionByGsm</h3>
     <p>GetPositionByGsm(250,99,42332,36002)</p>
     <h3>GetAddressByPosition</h3>
-    <p><%= Nl2br(GetAddressByPosition(55.767175, 37.571327)) %></p>
+    <p><%= Nl2br(GetAddressByPosition(55.767175m, 37.571327m)) %></p>
     <h3>GetPositionsByAddress</h3>
     <p><%= Nl2br(GetPositionsByAddress("San-Francisco", 10, Yandex.GeoDecoder.Lang.en_US)) %></p>
     <h3>GetAddressByIp</h3>

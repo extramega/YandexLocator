@@ -20,7 +20,7 @@ namespace Yandex
         public GeoDecoder(string key = null) { Key = key; }
 
         /// <summary>Получение адреса по координатам</summary>
-        public Address GetAddressByPoint(double latitude, double longitude, Lang lang = Lang.ru_RU)
+        public Address GetAddressByPoint(decimal latitude, decimal longitude, Lang lang = Lang.ru_RU)
         {
             NameValueCollection query = new NameValueCollection
             {
@@ -282,9 +282,9 @@ namespace Yandex
         public class Point
         {
             /// <summary>Широта в градусах. Имеет десятичное представление с точностью до семи знаков после запятой.</summary>
-            public double latitude;//55.743675,
+            public decimal latitude;//55.743675,
             /// <summary>Долгота в градусах. Имеет десятичное представление с точностью до семи знаков после запятой.</summary>
-            public double longitude;//37.5646301,
+            public decimal longitude;//37.5646301,
 
             /// <summary>latitude,longitude</summary>
             /// <returns></returns>
@@ -313,10 +313,10 @@ namespace Yandex
                     default:
                         throw new ArgumentException("format is wrong");
                 }
-                if (!double.TryParse(strLatitude, NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
+                if (!decimal.TryParse(strLatitude, NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
                     throw new ArgumentException("Latitude is wrong");
                 latitude = Math.Round(latitude, 7);
-                if (!double.TryParse(strLongitude, NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
+                if (!decimal.TryParse(strLongitude, NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
                     throw new ArgumentException("Longitude is wrong");
                 longitude = Math.Round(longitude, 7);
             }
